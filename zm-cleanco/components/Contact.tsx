@@ -109,7 +109,7 @@ export default function Contact() {
               <p className="text-xs font-bold text-brand-soft uppercase tracking-widest mb-1.5">
                 Operating Hours
               </p>
-              <p className="text-sm text-brand-mid">Monday–Saturday, 7am–6pm</p>
+              <p className="text-sm text-brand-mid">Sunday–Monday, 7am–6pm</p>
             </div>
           </div>
 
