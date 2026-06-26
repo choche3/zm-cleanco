@@ -4,11 +4,30 @@ import { useEffect, useRef, useState } from "react";
 import {
   X, CheckCircle, Star, ChevronRight, ShieldCheck,
   Home, Sparkles, Truck, Building2, CalendarDays, HardHat,
-  Repeat2, CalendarClock, Calendar,
+  Repeat2, CalendarClock, Calendar, Loader2,
   type LucideIcon,
 } from "lucide-react";
 import { useModal } from "@/lib/modal-context";
 import { SERVICES, RECURRING_PLANS, TIME_SLOTS } from "@/lib/data";
+
+/* ─────────────────────────────────────────────────────────────
+   Shared submit helper
+   ─────────────────────────────────────────────────────────────
+   This is the "delivery van" — every modal hands it a package
+   (the form data) and it drives it to /api/submit, which then
+   forwards it to Google Sheets.
+*/
+async function submitToSheet(data: Record<string, string>): Promise<void> {
+  const res = await fetch("/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Submission failed");
+  }
+}
 
 /* ─────────────────────────────────────────────────────────────
    Shared primitives
@@ -79,7 +98,7 @@ function ModalFoot({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* 5-step stepper — matches screenshot exactly */
+/* 5-step stepper */
 function Stepper({ step, total = 5 }: { step: number; total?: number }) {
   return (
     <div className="flex items-center justify-center gap-0 mb-7">
@@ -123,16 +142,17 @@ function F({ label, children }: { label: string; children: React.ReactNode }) {
   );
 }
 
-function GoldBtn({ label, disabled, onClick, type = "button" }: {
-  label: string; disabled?: boolean; onClick?: () => void; type?: "button" | "submit";
+function GoldBtn({ label, disabled, loading, onClick, type = "button" }: {
+  label: string; disabled?: boolean; loading?: boolean; onClick?: () => void; type?: "button" | "submit";
 }) {
   return (
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled}
-      className="w-full bg-gold hover:bg-gold-dark disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-colors shadow-sm text-sm"
+      disabled={disabled || loading}
+      className="w-full bg-gold hover:bg-gold-dark disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-colors shadow-sm text-sm flex items-center justify-center gap-2"
     >
+      {loading && <Loader2 size={16} className="animate-spin" />}
       {label}
     </button>
   );
@@ -168,30 +188,65 @@ function SuccessView({ msg, onClose }: { msg: string; onClose: () => void }) {
   );
 }
 
+function ErrorBanner({ message }: { message: string }) {
+  return (
+    <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm mb-4">
+      ⚠️ {message}
+    </div>
+  );
+}
+
 /* ─────────────────────────────────────────────────────────────
    BOOK MODAL — 5-step wizard
 ───────────────────────────────────────────────────────────── */
 export function BookModal() {
   const { modal, close } = useModal();
-  const [step, setStep]           = useState(1);
-  const [done, setDone]           = useState(false);
-  const [service, setService]     = useState("");
-  const [freq, setFreq]           = useState("one-time");
-  const [date, setDate]           = useState("");
-  const [time, setTime]           = useState("");
-  const [name, setName]           = useState("");
-  const [phone, setPhone]         = useState("");
-  const [address, setAddress]     = useState("");
-  const [notes, setNotes]         = useState("");
+  const [step, setStep]       = useState(1);
+  const [done, setDone]       = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState("");
+  const [service, setService] = useState("");
+  const [freq, setFreq]       = useState("one-time");
+  const [date, setDate]       = useState("");
+  const [time, setTime]       = useState("");
+  const [name, setName]       = useState("");
+  const [phone, setPhone]     = useState("");
+  const [address, setAddress] = useState("");
+  const [notes, setNotes]     = useState("");
 
   const reset = () => {
-    setStep(1); setDone(false); setService(""); setFreq("one-time");
+    setStep(1); setDone(false); setLoading(false); setError("");
+    setService(""); setFreq("one-time");
     setDate(""); setTime(""); setName(""); setPhone(""); setAddress(""); setNotes("");
   };
 
   if (modal !== "book") return null;
 
   const handleClose = () => { close(); reset(); };
+
+  // ── The real submit — sends data to /api/submit → Google Sheets
+  const handleConfirm = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await submitToSheet({
+        type: "booking",
+        service,
+        frequency: freq,
+        date,
+        time,
+        name,
+        phone,
+        address,
+        notes,
+      });
+      setDone(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (done) {
     return (
@@ -381,6 +436,7 @@ export function BookModal() {
                 <ShieldCheck size={14} className="mt-0.5 flex-shrink-0" strokeWidth={2} />
                 <span><strong>Note:</strong> A deposit is required to confirm. Payment details will be sent via WhatsApp after submission.</span>
               </div>
+              {error && <ErrorBanner message={error} />}
             </div>
           )}
         </ModalBody>
@@ -388,7 +444,7 @@ export function BookModal() {
         {/* Footer nav */}
         <ModalFoot>
           <div className={`flex gap-3 ${step === 1 ? "" : ""}`}>
-            {step > 1 && (
+            {step > 1 && !loading && (
               <OutlineBtn label="← Back" onClick={() => setStep(step - 1)} />
             )}
             {step < 5 ? (
@@ -402,7 +458,11 @@ export function BookModal() {
                 }
               />
             ) : (
-              <GoldBtn label="Confirm Booking" onClick={() => setDone(true)} />
+              <GoldBtn
+                label={loading ? "Submitting…" : "Confirm Booking"}
+                loading={loading}
+                onClick={handleConfirm}
+              />
             )}
           </div>
         </ModalFoot>
@@ -416,7 +476,9 @@ export function BookModal() {
 ───────────────────────────────────────────────────────────── */
 export function QuoteModal() {
   const { modal, close, preService } = useModal();
-  const [done, setDone] = useState(false);
+  const [done, setDone]       = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState("");
   const [form, setForm] = useState({
     firstName: "", lastName: "", phone: "",
     service: preService || "deep", location: "", size: "", notes: "",
@@ -428,7 +490,20 @@ export function QuoteModal() {
 
   if (modal !== "quote") return null;
 
-  const handleClose = () => { close(); setDone(false); };
+  const handleClose = () => { close(); setDone(false); setError(""); };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await submitToSheet({ type: "quote", ...form });
+      setDone(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (done) {
     return (
@@ -448,43 +523,47 @@ export function QuoteModal() {
       <ModalBox>
         <ModalHead title="Get an Instant Quote" subtitle="We'll reply within the hour." onClose={handleClose} />
         <ModalBody>
-          <form id="qform" onSubmit={(e) => { e.preventDefault(); setDone(true); }}>
-            <div className="grid grid-cols-2 gap-3">
-              <F label="First Name">
-                <input className={inp} placeholder="Chanda" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} required />
-              </F>
-              <F label="Last Name">
-                <input className={inp} placeholder="Mwale" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} required />
-              </F>
-            </div>
-            <F label="Phone / WhatsApp">
-              <input className={inp} type="tel" placeholder="+260 97X XXX XXX" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
+          <div className="grid grid-cols-2 gap-3">
+            <F label="First Name">
+              <input className={inp} placeholder="Chanda" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} required />
             </F>
-            <F label="Service Type">
-              <select className={sel} value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>
-                {SERVICES.map((s) => <option key={s.id} value={s.id}>{s.title}</option>)}
-              </select>
+            <F label="Last Name">
+              <input className={inp} placeholder="Mwale" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} required />
             </F>
-            <F label="Location / Neighbourhood">
-              <input className={inp} placeholder="e.g. Kabulonga, Lusaka" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} required />
-            </F>
-            <F label="Property Size">
-              <select className={sel} value={form.size} onChange={(e) => setForm({ ...form, size: e.target.value })}>
-                <option value="">Select size…</option>
-                <option>Studio / 1 Bedroom</option>
-                <option>2 Bedrooms</option>
-                <option>3 Bedrooms</option>
-                <option>4+ Bedrooms</option>
-                <option>Commercial Space</option>
-              </select>
-            </F>
-            <F label="Notes (optional)">
-              <textarea className={inp + " resize-none"} rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Any special instructions…" />
-            </F>
-          </form>
+          </div>
+          <F label="Phone / WhatsApp">
+            <input className={inp} type="tel" placeholder="+260 97X XXX XXX" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
+          </F>
+          <F label="Service Type">
+            <select className={sel} value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>
+              {SERVICES.map((s) => <option key={s.id} value={s.id}>{s.title}</option>)}
+            </select>
+          </F>
+          <F label="Location / Neighbourhood">
+            <input className={inp} placeholder="e.g. Kabulonga, Lusaka" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} required />
+          </F>
+          <F label="Property Size">
+            <select className={sel} value={form.size} onChange={(e) => setForm({ ...form, size: e.target.value })}>
+              <option value="">Select size…</option>
+              <option>Studio / 1 Bedroom</option>
+              <option>2 Bedrooms</option>
+              <option>3 Bedrooms</option>
+              <option>4+ Bedrooms</option>
+              <option>Commercial Space</option>
+            </select>
+          </F>
+          <F label="Notes (optional)">
+            <textarea className={inp + " resize-none"} rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Any special instructions…" />
+          </F>
+          {error && <ErrorBanner message={error} />}
         </ModalBody>
         <ModalFoot>
-          <GoldBtn label="Request My Quote →" type="submit" onClick={() => setDone(true)} />
+          <GoldBtn
+            label={loading ? "Submitting…" : "Request My Quote →"}
+            loading={loading}
+            disabled={!form.firstName || !form.phone || !form.location}
+            onClick={handleSubmit}
+          />
         </ModalFoot>
       </ModalBox>
     </Overlay>
@@ -492,7 +571,7 @@ export function QuoteModal() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   POLICY MODAL
+   POLICY MODAL — read-only, no submission needed
 ───────────────────────────────────────────────────────────── */
 export function PolicyModal() {
   const { modal, close } = useModal();
@@ -534,19 +613,41 @@ export function PolicyModal() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   WRITE REVIEW MODAL
+   REVIEW MODAL
 ───────────────────────────────────────────────────────────── */
 export function ReviewModal() {
   const { modal, close } = useModal();
-  const [done, setDone]   = useState(false);
-  const [rating, setRating] = useState(5);
-  const [hover, setHover]   = useState(0);
-  const [name, setName]     = useState("");
-  const [loc, setLoc]       = useState("");
-  const [body, setBody]     = useState("");
+  const [done, setDone]       = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState("");
+  const [rating, setRating]   = useState(5);
+  const [hover, setHover]     = useState(0);
+  const [name, setName]       = useState("");
+  const [loc, setLoc]         = useState("");
+  const [body, setBody]       = useState("");
 
   if (modal !== "review") return null;
-  const handleClose = () => { close(); setDone(false); };
+  const handleClose = () => { close(); setDone(false); setError(""); };
+
+  const handleSubmit = async () => {
+    if (body.length < 20 || !name || !loc) return;
+    setLoading(true);
+    setError("");
+    try {
+      await submitToSheet({
+        type: "review",
+        name,
+        neighbourhood: loc,
+        rating: String(rating),
+        reviewBody: body,
+      });
+      setDone(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (done) {
     return (
@@ -566,7 +667,6 @@ export function ReviewModal() {
       <ModalBox>
         <ModalHead title="Write a Review" subtitle="Share your experience with Zm CleanCo." onClose={handleClose} />
         <ModalBody>
-          {/* Star picker */}
           <div className="mb-5">
             <label className="block text-sm font-semibold text-brand-dark mb-2">Your Rating</label>
             <div className="flex gap-1.5 items-center">
@@ -600,9 +700,15 @@ export function ReviewModal() {
           <F label="Your Review">
             <textarea className={inp + " resize-none"} rows={4} placeholder="Tell us about your experience…" value={body} onChange={(e) => setBody(e.target.value)} required minLength={20} />
           </F>
+          {error && <ErrorBanner message={error} />}
         </ModalBody>
         <ModalFoot>
-          <GoldBtn label="Submit Review →" onClick={() => body.length >= 20 && name && loc ? setDone(true) : undefined} />
+          <GoldBtn
+            label={loading ? "Submitting…" : "Submit Review →"}
+            loading={loading}
+            disabled={body.length < 20 || !name || !loc}
+            onClick={handleSubmit}
+          />
         </ModalFoot>
       </ModalBox>
     </Overlay>
@@ -614,14 +720,30 @@ export function ReviewModal() {
 ───────────────────────────────────────────────────────────── */
 export function RecurringModal() {
   const { modal, close } = useModal();
-  const [done, setDone]     = useState(false);
-  const [plan, setPlan]     = useState("biweekly");
-  const [name, setName]     = useState("");
-  const [phone, setPhone]   = useState("");
+  const [done, setDone]       = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState("");
+  const [plan, setPlan]       = useState("biweekly");
+  const [name, setName]       = useState("");
+  const [phone, setPhone]     = useState("");
   const [address, setAddress] = useState("");
 
   if (modal !== "recurring") return null;
-  const handleClose = () => { close(); setDone(false); };
+  const handleClose = () => { close(); setDone(false); setError(""); };
+
+  const handleSubmit = async () => {
+    if (!name || !phone || !address) return;
+    setLoading(true);
+    setError("");
+    try {
+      await submitToSheet({ type: "recurring", plan, name, phone, address });
+      setDone(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (done) {
     return (
@@ -641,7 +763,6 @@ export function RecurringModal() {
       <ModalBox>
         <ModalHead title="Recurring Cleaning Plans" subtitle="Lock in savings. Cancel anytime." onClose={handleClose} />
         <ModalBody>
-          {/* Plan selector */}
           <div className="grid grid-cols-3 gap-3 mb-6">
             {RECURRING_PLANS.map((p) => {
               const PIcon = PLAN_ICONS[p.icon] ?? Repeat2;
@@ -684,11 +805,14 @@ export function RecurringModal() {
             </strong>{" "}
             — Your discount applies automatically. We&apos;ll confirm your preferred day via WhatsApp.
           </div>
+          {error && <ErrorBanner message={error} />}
         </ModalBody>
         <ModalFoot>
           <GoldBtn
-            label="Start My Recurring Plan →"
-            onClick={() => name && phone && address ? setDone(true) : undefined}
+            label={loading ? "Submitting…" : "Start My Recurring Plan →"}
+            loading={loading}
+            disabled={!name || !phone || !address}
+            onClick={handleSubmit}
           />
         </ModalFoot>
       </ModalBox>
