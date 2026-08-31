@@ -197,8 +197,18 @@ async function getAccessToken(): Promise<string> {
     new TextEncoder().encode(signingInput)
   );
 
-  const sig = btoa(String.fromCharCode(...new Uint8Array(signature)))
-    .replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+const signatureBytes = new Uint8Array(signature);
+
+let binarySignature = "";
+
+for (let i = 0; i < signatureBytes.length; i++) {
+  binarySignature += String.fromCharCode(signatureBytes[i]);
+}
+
+const sig = btoa(binarySignature)
+  .replace(/=/g, "")
+  .replace(/\+/g, "-")
+  .replace(/\//g, "_");
 
   const jwt = `${signingInput}.${sig}`;
 
