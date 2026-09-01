@@ -20,22 +20,22 @@ export default function About() {
           <div>
             <p className="text-xs font-bold tracking-[0.15em] text-gold uppercase mb-2">About Us</p>
             <h2 className="font-serif font-bold text-3xl md:text-4xl text-brand-dark mb-5">
-              About <span className="italic text-gold">Zm</span> CleanCo.
+              About <span className="italic text-gold">Radiant Rose</span> Cleaning Services
             </h2>
             <p className="text-brand-mid leading-relaxed mb-4">
-              At Zm CleanCo., our goal is to provide professional, reliable cleaning services
-              that make your space shine across Lusaka and Zambia. We&apos;re committed to
-              delivering spotless results for every occasion. ✨
+              At Radiant Rose Cleaning Services, our goal is to provide professional, reliable
+              cleaning that makes your space shine across Lusaka and Zambia. We&apos;re committed
+              to delivering spotless, radiant results for every occasion. ✨
             </p>
             <p className="text-brand-mid leading-relaxed mb-5">
               Our team is fully vetted, trained, and equipped with quality, safe cleaning
               products. We treat your home and business with the same care we would give our own.
             </p>
             <a
-              href="mailto:info@zmcleanco.co.zm"
+              href="mailto:info@radiantrosecleaning.co.zm"
               className="block text-gold font-medium text-sm mb-4 hover:underline"
             >
-              info@zmcleanco.co.zm
+              info@radiantrosecleaning.co.zm
             </a>
             <button
               onClick={() => open("policy")}

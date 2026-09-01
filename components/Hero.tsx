@@ -40,10 +40,10 @@ export default function Hero() {
         {/* CTA buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
           <button
-            onClick={() => open("quote")}
+            onClick={() => open("book")}
             className="bg-gold hover:bg-gold-dark text-white font-semibold px-8 py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 text-[0.95rem]"
           >
-            Get an Instant Quote
+            Book a Cleaning
           </button>
           <button
             onClick={() => open("recurring")}

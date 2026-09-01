@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  X, CheckCircle, Star, ChevronRight, ShieldCheck,
-  Home, Sparkles, Truck, Building2, CalendarDays, HardHat,
+  X, CheckCircle, Star, ShieldCheck,
+  Home, Sparkles, Truck, Building2, CalendarDays, HardHat, Users,
   Repeat2, CalendarClock, Calendar, Loader2,
   type LucideIcon,
 } from "lucide-react";
@@ -33,7 +33,7 @@ async function submitToSheet(data: Record<string, string>): Promise<void> {
    Shared primitives
 ───────────────────────────────────────────────────────────── */
 const ICON_MAP: Record<string, LucideIcon> = {
-  Home, Sparkles, Truck, Building2, CalendarDays, HardHat,
+  Home, Sparkles, Truck, Building2, CalendarDays, HardHat, Users, CalendarClock,
 };
 const PLAN_ICONS: Record<string, LucideIcon> = {
   Repeat2, CalendarClock, Calendar,
@@ -285,11 +285,14 @@ export function BookModal() {
           <Stepper step={step} />
 
           {/* ── Step 1: Select Service ── */}
+          {/* Only fixed-price services can be booked directly. Services that
+              need a custom quote (site visit, etc.) are requested via the
+              single quote form at the bottom of the site instead. */}
           {step === 1 && (
             <div className="anim-fade-up">
               <p className="font-semibold text-brand-dark mb-4">Select Your Service</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {SERVICES.map((svc) => {
+                {SERVICES.filter((svc) => !svc.hasQuote).map((svc) => {
                   const SvcIcon = ICON_MAP[svc.icon] ?? Home;
                   const active = service === svc.id;
                   return (
@@ -303,9 +306,6 @@ export function BookModal() {
                           : "border-brand-border bg-white hover:border-gold/40"
                       }`}
                     >
-                      {svc.hasQuote && (
-                        <Sparkles size={11} strokeWidth={1.5} className="absolute top-2.5 right-2.5 text-gold/30" />
-                      )}
                       <SvcIcon
                         size={34}
                         strokeWidth={1.3}
@@ -319,11 +319,11 @@ export function BookModal() {
                           {svc.subtitle}
                         </p>
                       </div>
-                      {svc.hasQuote && (
-                        <span className={`inline-flex items-center gap-1 text-[0.7rem] font-bold px-2.5 py-1 rounded-full ${
+                      {svc.priceTiers && (
+                        <span className={`text-[0.7rem] font-bold px-2.5 py-1 rounded-full ${
                           active ? "bg-gold text-white" : "bg-gold-pale text-gold-dark"
                         }`}>
-                          INSTANT QUOTE <ChevronRight size={9} />
+                          From {svc.priceTiers[0].price}
                         </span>
                       )}
                     </button>
@@ -474,6 +474,9 @@ export function BookModal() {
 /* ─────────────────────────────────────────────────────────────
    QUOTE MODAL
 ───────────────────────────────────────────────────────────── */
+// Services that don't have fixed pricing — the only ones this form covers.
+const QUOTE_SERVICES = SERVICES.filter((s) => s.hasQuote);
+
 export function QuoteModal() {
   const { modal, close, preService } = useModal();
   const [done, setDone]       = useState(false);
@@ -481,7 +484,7 @@ export function QuoteModal() {
   const [error, setError]     = useState("");
   const [form, setForm] = useState({
     firstName: "", lastName: "", phone: "",
-    service: preService || "deep", location: "", size: "", notes: "",
+    service: preService || QUOTE_SERVICES[0]?.id || "", location: "", size: "", notes: "",
   });
 
   useEffect(() => {
@@ -521,7 +524,7 @@ export function QuoteModal() {
   return (
     <Overlay onClose={handleClose}>
       <ModalBox>
-        <ModalHead title="Get an Instant Quote" subtitle="We'll reply within the hour." onClose={handleClose} />
+        <ModalHead title="Request a Quote" subtitle="For services that need a custom price. We'll get back to you shortly." onClose={handleClose} />
         <ModalBody>
           <div className="grid grid-cols-2 gap-3">
             <F label="First Name">
@@ -536,7 +539,7 @@ export function QuoteModal() {
           </F>
           <F label="Service Type">
             <select className={sel} value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>
-              {SERVICES.map((s) => <option key={s.id} value={s.id}>{s.title}</option>)}
+              {QUOTE_SERVICES.map((s) => <option key={s.id} value={s.id}>{s.title}</option>)}
             </select>
           </F>
           <F label="Location / Neighbourhood">
@@ -580,7 +583,6 @@ export function PolicyModal() {
   const items = [
     { t: "Deposit required",           b: "A deposit is required to secure your cleaning slot." },
     { t: "24-hour cancellation policy",b: "Cancellations must be made at least 24 hours prior to your appointment, or a fee may apply." },
-    { t: "Lateness fee may apply",     b: "If you are more than 15 minutes late, a lateness fee may be charged." },
     { t: "Access to property",         b: "Please ensure access is available at the agreed time, or leave clear instructions." },
   ];
 
@@ -665,7 +667,7 @@ export function ReviewModal() {
   return (
     <Overlay onClose={handleClose}>
       <ModalBox>
-        <ModalHead title="Write a Review" subtitle="Share your experience with Zm CleanCo." onClose={handleClose} />
+        <ModalHead title="Write a Review" subtitle="Share your experience with Radiant Rose Cleaning Services." onClose={handleClose} />
         <ModalBody>
           <div className="mb-5">
             <label className="block text-sm font-semibold text-brand-dark mb-2">Your Rating</label>

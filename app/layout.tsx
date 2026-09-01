@@ -3,15 +3,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Zm CleanCo. – Professional Cleaning in Lusaka & Zambia",
+  title: "Radiant Rose Cleaning Services – Professional Cleaning in Lusaka & Zambia",
   description:
-    "Professional residential and commercial cleaning services across Lusaka and Zambia. Book instantly with our modern platform. Reliable, Professional, Spotless.",
+    "Excellence in every clean, radiant results. Professional residential and commercial cleaning services across Lusaka and Zambia. Book instantly with our modern platform.",
   keywords:
-    "cleaning services, Lusaka, Zambia, residential cleaning, commercial cleaning, house cleaning, office cleaning",
+    "cleaning services, Lusaka, Zambia, residential cleaning, commercial cleaning, house cleaning, office cleaning, after event cleaning, post construction cleaning",
   openGraph: {
-    title: "Zm CleanCo. – Professional Cleaning in Lusaka & Zambia",
+    title: "Radiant Rose Cleaning Services – Professional Cleaning in Lusaka & Zambia",
     description:
-      "Professional residential and commercial cleaning services across Lusaka and Zambia.",
+      "Excellence in every clean, radiant results. Professional residential and commercial cleaning services across Lusaka and Zambia.",
     locale: "en_ZM",
     type: "website",
   },

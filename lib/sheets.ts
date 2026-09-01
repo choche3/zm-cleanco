@@ -8,8 +8,8 @@
 // /**
 //  * lib/sheets.ts
 //  * ─────────────────────────────────────────────────────────────
-//  * Reusable helper to append a row to any tab in the ZmCleanCo
-//  * Google Sheet, using a Service Account for auth.
+//  * Reusable helper to append a row to any tab in the Radiant Rose
+//  * Cleaning Services Google Sheet, using a Service Account for auth.
 //  *
 //  * Think of this file like a "delivery driver" — any part of
 //  * the app hands it a package (row data) and a destination
@@ -197,18 +197,8 @@ async function getAccessToken(): Promise<string> {
     new TextEncoder().encode(signingInput)
   );
 
-const signatureBytes = new Uint8Array(signature);
-
-let binarySignature = "";
-
-for (let i = 0; i < signatureBytes.length; i++) {
-  binarySignature += String.fromCharCode(signatureBytes[i]);
-}
-
-const sig = btoa(binarySignature)
-  .replace(/=/g, "")
-  .replace(/\+/g, "-")
-  .replace(/\//g, "_");
+  const sig = btoa(String.fromCharCode(...new Uint8Array(signature)))
+    .replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 
   const jwt = `${signingInput}.${sig}`;
 

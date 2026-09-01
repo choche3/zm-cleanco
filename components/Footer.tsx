@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { Mail, Phone, Clock, MapPin, ArrowRight } from "lucide-react";
 import { useModal } from "@/lib/modal-context";
 
@@ -26,7 +27,7 @@ export default function Footer() {
             </p>
           </div>
           <button
-            onClick={() => open("quote")}
+            onClick={() => open("book")}
             className="flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-semibold px-7 py-3.5 rounded-xl transition-colors shadow-lg flex-shrink-0"
           >
             Get Started <ArrowRight size={16} strokeWidth={2} />
@@ -39,16 +40,19 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl border-2 border-gold bg-gold/10 flex flex-col items-center justify-center leading-none">
-              <span className="font-serif font-bold text-gold text-[11px]">ZM</span>
-              <span className="font-serif font-bold text-gold text-[9px] tracking-widest mt-0.5">CO.</span>
-            </div>
+            <Image
+              src="/images/radiant-rose-icon.png"
+              alt="Radiant Rose Cleaning Services"
+              width={40}
+              height={44}
+              className="w-10 h-auto flex-shrink-0"
+            />
             <div>
               <p className="font-serif italic font-semibold text-white text-[1rem]">
-                <span className="text-gold">Zm</span> CleanCo.
+                Radiant Rose <span className="text-gold">Cleaning Services</span>
               </p>
               <p className="text-white/40 text-[0.65rem] tracking-widest uppercase">
-                Professional &amp; Reliable
+                Excellence In Every Clean
               </p>
             </div>
           </div>
@@ -85,7 +89,7 @@ export default function Footer() {
           <h4 className="text-white font-semibold text-sm tracking-wide mb-4">Contact Info</h4>
           <ul className="space-y-3 mb-6">
             {[
-              { Icon: Mail,   text: "info@zmcleanco.co.zm", href: "mailto:info@zmcleanco.co.zm" },
+              { Icon: Mail,   text: "info@radiantrosecleaning.co.zm", href: "mailto:info@radiantrosecleaning.co.zm" },
               { Icon: Phone,  text: "+260 97X XXX XXX",     href: "tel:+260970000000" },
               { Icon: Clock,  text: "Mon–Sat, 7am–6pm",     href: null },
               { Icon: MapPin, text: "Lusaka, Zambia",        href: null },
@@ -98,12 +102,15 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-          <div className="flex flex-col gap-2">
+          <div id="quote-cta" className="flex flex-col gap-2 scroll-mt-24">
+            {/* The one and only quote request on the site — for services
+                that need a custom price (e.g. post-construction, which
+                requires a site visit before a quotation is shared). */}
             <button
               onClick={() => open("quote")}
               className="text-center border border-gold text-gold text-sm font-semibold py-2.5 rounded-xl hover:bg-gold hover:text-white transition-all"
             >
-              Get a Quote →
+              Request a Quote →
             </button>
             <button
               onClick={() => open("book")}
@@ -119,7 +126,7 @@ export default function Footer() {
       <div className="border-t border-white/8 px-4 sm:px-6 py-5">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-white/28 text-xs">
-            © 2026 Zm CleanCo. All rights reserved. | Lusaka, Zambia
+            © 2026 Radiant Rose Cleaning Services. All rights reserved. | Lusaka, Zambia
           </p>
           <div className="flex gap-5">
             {["Privacy Policy", "Terms of Service"].map((l) => (

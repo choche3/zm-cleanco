@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { Mail, Clock, Phone, MapPin, MessageCircle, CheckCircle } from "lucide-react";
 import { useModal } from "@/lib/modal-context";
 
@@ -14,13 +15,16 @@ export default function Contact() {
           <div>
             {/* Logo + name */}
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl border-2 border-gold bg-gold-pale flex flex-col items-center justify-center leading-none">
-                <span className="font-serif font-bold text-gold text-[11px]">ZM</span>
-                <span className="font-serif font-bold text-gold text-[9px] tracking-widest mt-0.5">CO.</span>
-              </div>
+              <Image
+                src="/images/radiant-rose-icon.png"
+                alt="Radiant Rose Cleaning Services"
+                width={44}
+                height={48}
+                className="w-11 h-auto flex-shrink-0"
+              />
               <div>
                 <p className="font-serif italic font-semibold text-[1rem] text-brand-dark leading-tight">
-                  <span className="text-gold">Zm</span> CleanCo.
+                  Radiant <span className="text-gold">Rose</span>
                 </p>
                 <p className="text-xs text-brand-soft">Lusaka, Zambia</p>
               </div>
@@ -37,7 +41,7 @@ export default function Contact() {
             <ul className="space-y-2.5 text-sm text-brand-mid mb-6">
               {[
                 { Icon: MapPin,  label: "Serving Lusaka & Surrounding Areas",  href: null },
-                { Icon: Mail,    label: "info@zmcleanco.co.zm",                href: "mailto:info@zmcleanco.co.zm" },
+                { Icon: Mail,    label: "info@radiantrosecleaning.co.zm",      href: "mailto:info@radiantrosecleaning.co.zm" },
                 { Icon: Phone,   label: "+260 97X XXX XXX",                    href: "tel:+260970000000" },
                 { Icon: Clock,   label: "Monday–Saturday, 7am–6pm",            href: null },
               ].map(({ Icon, label, href }) => (
@@ -59,10 +63,12 @@ export default function Contact() {
                 Book Standard Clean
               </button>
               <button
-                onClick={() => open("quote")}
+                onClick={() =>
+                  document.getElementById("quote-cta")?.scrollIntoView({ behavior: "smooth", block: "center" })
+                }
                 className="border-2 border-gold text-gold text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-gold-pale transition-colors"
               >
-                Get Instant Quote
+                Need a Custom Quote?
               </button>
             </div>
           </div>
@@ -74,7 +80,7 @@ export default function Contact() {
             </h3>
             <div className="flex flex-col gap-3 mb-5">
               <a
-                href="mailto:info@zmcleanco.co.zm"
+                href="mailto:info@radiantrosecleaning.co.zm"
                 className="flex items-center gap-3 bg-white border border-brand-border rounded-xl px-4 py-3.5 hover:border-gold transition-colors group"
               >
                 <div className="w-9 h-9 rounded-lg bg-gold-pale flex items-center justify-center flex-shrink-0">
@@ -84,7 +90,7 @@ export default function Contact() {
                   <p className="text-sm font-semibold text-brand-dark group-hover:text-gold transition-colors">
                     Email us
                   </p>
-                  <p className="text-xs text-brand-soft">info@zmcleanco.co.zm</p>
+                  <p className="text-xs text-brand-soft">info@radiantrosecleaning.co.zm</p>
                 </div>
               </a>
               <a

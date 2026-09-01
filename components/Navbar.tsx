@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Menu, X, Sparkles, Star, Zap, Phone, Share2, Sun, Moon } from "lucide-react";
 import { useModal } from "@/lib/modal-context";
 
@@ -32,20 +33,21 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-4">
 
           {/* ── Logo ── */}
-          <a href="#" className="flex items-center gap-3 flex-shrink-0 group">
-            {/* Square logo mark — matches the original's rounded-square badge */}
-            <div className="w-[46px] h-[46px] rounded-xl border-2 border-gold bg-gold-pale flex flex-col items-center justify-center leading-none">
-              <span className="font-serif font-bold text-gold text-[11px] tracking-tight">ZM</span>
-              <span className="font-serif font-bold text-gold text-[9px] tracking-widest mt-0.5">CO.</span>
-            </div>
+          <a href="#" className="flex items-center gap-2.5 flex-shrink-0 group">
+            <Image
+              src="/images/radiant-rose-icon.png"
+              alt="Radiant Rose Cleaning Services"
+              width={46}
+              height={50}
+              className="w-[42px] sm:w-[46px] h-auto flex-shrink-0"
+              priority
+            />
             <div className="flex flex-col">
-              {/* Italic serif brand name — matches Laurel's italic gold style */}
-              <span className="font-serif italic font-semibold text-[1.15rem] leading-tight">
-                <span className="text-gold">Zm</span>
-                <span className="text-gold-dark"> CleanCo.</span>
+              <span className="font-serif italic font-semibold text-[1.05rem] sm:text-[1.15rem] leading-tight text-brand-dark">
+                Radiant Rose
               </span>
-              <span className="text-[0.65rem] text-brand-soft font-medium tracking-widest uppercase">
-                Professional &amp; Reliable
+              <span className="text-[0.62rem] text-brand-soft font-medium tracking-widest uppercase">
+                Cleaning Services
               </span>
             </div>
           </a>
@@ -110,7 +112,10 @@ export default function Navbar() {
               ))}
               <div className="border-t border-brand-border mt-2 pt-3 flex gap-2">
                 <button
-                  onClick={() => { open("quote"); setMenuOpen(false); }}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    document.getElementById("quote-cta")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                  }}
                   className="flex-1 border-2 border-gold text-gold font-semibold py-2.5 rounded-xl text-sm hover:bg-gold-pale transition-colors"
                 >
                   Get a Quote

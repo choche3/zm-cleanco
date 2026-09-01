@@ -10,12 +10,19 @@ export interface Review {
   color: string;
 }
 
+export interface PriceTier {
+  label: string;
+  price: string;
+}
+
 export interface Service {
   id: string;
   icon: string; // lucide icon name
   title: string;
   subtitle: string;
-  hasQuote: boolean;
+  hasQuote: boolean;        // true = needs a custom quote (e.g. site visit) instead of a fixed price
+  priceTiers?: PriceTier[]; // fixed pricing shown directly on the card
+  priceNote?: string;       // extra pricing detail, e.g. "+K100 per extra room" or a quote note
 }
 
 export interface RecurringPlan {
@@ -95,17 +102,39 @@ export const REVIEWS: Review[] = [
 export const SERVICES: Service[] = [
   {
     id: "standard",
-    icon: "House",
+    icon: "Home",
     title: "Standard Cleaning",
-    subtitle: "Included in Every Standard Clean",
+    subtitle: "A thorough top-to-bottom clean for everyday upkeep.",
     hasQuote: false,
+    priceTiers: [
+      { label: "1 Bed House", price: "K1000" },
+      { label: "2 Bed House", price: "K1250" },
+    ],
+    priceNote: "+K100 per extra room",
   },
   {
     id: "deep",
     icon: "Sparkles",
     title: "Deep Cleaning",
-    subtitle: "Perfect for first-time clients or neglected spaces.",
-    hasQuote: true,
+    subtitle: "Includes neglected spaces — perfect for first-time clients.",
+    hasQuote: false,
+    priceTiers: [
+      { label: "1 Bed House", price: "K1300" },
+      { label: "2 Bed House", price: "K1500" },
+    ],
+    priceNote: "+K100 per extra room",
+  },
+  {
+    id: "afterevent",
+    icon: "Users",
+    title: "After-Event Cleaning",
+    subtitle: "Fast clean-up after your gathering, whatever the size.",
+    hasQuote: false,
+    priceTiers: [
+      { label: "Small Gathering (10–30 people)", price: "K1250" },
+      { label: "Medium Gathering (40–60 people)", price: "K2000" },
+      { label: "Large Gathering (70+ people)", price: "K3500" },
+    ],
   },
   {
     id: "moveinout",
@@ -123,7 +152,7 @@ export const SERVICES: Service[] = [
   },
   {
     id: "airbnb",
-    icon: "CalendarDays",
+    icon: "CalendarClock",
     title: "Airbnb Turnover",
     subtitle: "Fast, hospitality-standard reset for your rentals.",
     hasQuote: true,
@@ -134,6 +163,7 @@ export const SERVICES: Service[] = [
     title: "Post-Construction",
     subtitle: "Full clean after renovations or new builds.",
     hasQuote: true,
+    priceNote: "Requires a site visit before a quotation is shared.",
   },
 ];
 
@@ -179,9 +209,5 @@ export const POLICIES = [
   {
     title: "24-hour cancellation policy",
     body: "— cancellations must be done 24hrs prior to appointment or this might attract a fee.",
-  },
-  {
-    title: "Lateness fee may apply",
-    body: "if you are more than 15 minutes late.",
   },
 ];
