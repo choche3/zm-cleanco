@@ -191,16 +191,26 @@ async function getAccessToken(): Promise<string> {
     ["sign"]
   );
 
-  const signature = await crypto.subtle.sign(
-    "RSASSA-PKCS1-v1_5",
-    cryptoKey,
-    new TextEncoder().encode(signingInput)
-  );
+const signature = await crypto.subtle.sign(
+  "RSASSA-PKCS1-v1_5",
+  cryptoKey,
+  new TextEncoder().encode(signingInput)
+);
 
-  const sig = btoa(String.fromCharCode(...new Uint8Array(signature)))
-    .replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+const signatureBytes = new Uint8Array(signature);
 
-  const jwt = `${signingInput}.${sig}`;
+let binarySignature = "";
+
+for (let i = 0; i < signatureBytes.length; i++) {
+  binarySignature += String.fromCharCode(signatureBytes[i]);
+}
+
+const sig = btoa(binarySignature)
+  .replace(/=/g, "")
+  .replace(/\+/g, "-")
+  .replace(/\//g, "_");
+
+const jwt = `${signingInput}.${sig}`;
 
   const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
