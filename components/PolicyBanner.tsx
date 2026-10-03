@@ -19,7 +19,7 @@ export default function PolicyBanner() {
         </button>
 
         <h2 className="font-serif font-bold text-2xl text-brand-dark mb-5">
-          Our Booking Policy
+          Booking & Cancellation Policy
         </h2>
 
         <ul className="space-y-3.5 mb-6">
@@ -47,6 +47,11 @@ export default function PolicyBanner() {
         >
           Okay, got it
         </button>
+
+        <p className="text-xs text-brand-soft/70 mt-6 pt-5 border-t border-brand-border">
+          <span className="font-serif italic text-brand-dark">Radiant Rose Cleaning Company</span>
+          {" — Excellence in Every Clean. Radiant Results."}
+        </p>
       </div>
     </section>
   );

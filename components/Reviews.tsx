@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-import { Star, ChevronRight, PenLine } from "lucide-react";
+import { Star, PenLine } from "lucide-react";
 import { useModal } from "@/lib/modal-context";
 import { REVIEWS } from "@/lib/data";
 
@@ -21,8 +20,6 @@ function Stars({ n = 5, size = 14 }: { n?: number; size?: number }) {
 
 export default function Reviews() {
   const { open } = useModal();
-  const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? REVIEWS : REVIEWS.slice(0, 4);
 
   return (
     <section id="reviews" className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
@@ -49,29 +46,19 @@ export default function Reviews() {
             </div>
           </div>
           {/* Actions */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="flex items-center gap-1 text-gold text-sm font-semibold hover:underline"
-            >
-              {showAll ? "Show less" : "View all"}{" "}
-              <ChevronRight size={13} strokeWidth={2.5} />
-            </button>
-            <span className="text-brand-border text-lg">|</span>
-            <button
-              onClick={() => open("review")}
-              className="flex items-center gap-1.5 text-sm font-semibold text-gold border border-gold px-3 py-1.5 rounded-lg hover:bg-gold-pale transition-colors"
-            >
-              <PenLine size={13} strokeWidth={2} />
-              Write a review
-            </button>
-          </div>
+          <button
+            onClick={() => open("review")}
+            className="flex items-center gap-1.5 text-sm font-semibold text-gold border border-gold px-3 py-1.5 rounded-lg hover:bg-gold-pale transition-colors"
+          >
+            <PenLine size={13} strokeWidth={2} />
+            Write a review
+          </button>
         </div>
       </div>
 
       {/* Cards grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {visible.map((r) => (
+        {REVIEWS.map((r) => (
           <div
             key={r.id}
             className="bg-white border border-brand-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"

@@ -42,7 +42,7 @@ export default function Contact() {
               {[
                 { Icon: MapPin,  label: "Serving Lusaka & Surrounding Areas",  href: null },
                 { Icon: Mail,    label: "info@radiantrosecleaning.co.zm",      href: "mailto:info@radiantrosecleaning.co.zm" },
-                { Icon: Phone,   label: "+260 97X XXX XXX",                    href: "tel:+260970000000" },
+                { Icon: Phone,   label: "+260 975 200 005",                    href: "tel:+260970000000" },
                 { Icon: Clock,   label: "Monday–Saturday, 7am–6pm",            href: null },
               ].map(({ Icon, label, href }) => (
                 <li key={label} className="flex items-start gap-2.5">
@@ -94,7 +94,7 @@ export default function Contact() {
                 </div>
               </a>
               <a
-                href="https://wa.me/260975229684"
+                href="https://wa.me/260975200005"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 bg-white border border-brand-border rounded-xl px-4 py-3.5 hover:border-gold transition-colors group"
@@ -131,7 +131,7 @@ export default function Contact() {
                 onClick={() => open("book")}
                 className="w-full bg-gold hover:bg-gold-dark text-white font-semibold py-3 rounded-xl transition-colors shadow-sm"
               >
-                Select Date &amp; Time
+                Select Date & Time
               </button>
               <button
                 onClick={() =>

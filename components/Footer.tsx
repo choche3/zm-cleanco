@@ -20,7 +20,7 @@ export default function Footer() {
               Partner With Us
             </p>
             <h3 className="font-serif font-bold text-2xl md:text-3xl text-white">
-              Let&apos;s grow together
+              Let's grow together
             </h3>
             <p className="text-white/50 text-sm mt-1 max-w-sm">
               Get more customers 24/7 with professional cleaning services across Lusaka.
@@ -90,7 +90,7 @@ export default function Footer() {
           <ul className="space-y-3 mb-6">
             {[
               { Icon: Mail,   text: "info@radiantrosecleaning.co.zm", href: "mailto:info@radiantrosecleaning.co.zm" },
-              { Icon: Phone,  text: "+260 97X XXX XXX",     href: "tel:+260970000000" },
+              { Icon: Phone,  text: "+260 975 200 005",     href: "tel:+260970000000" },
               { Icon: Clock,  text: "Mon–Sat, 7am–6pm",     href: null },
               { Icon: MapPin, text: "Lusaka, Zambia",        href: null },
             ].map(({ Icon, text, href }) => (

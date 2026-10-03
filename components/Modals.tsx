@@ -8,7 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useModal } from "@/lib/modal-context";
-import { SERVICES, RECURRING_PLANS, TIME_SLOTS } from "@/lib/data";
+import { SERVICES, RECURRING_PLANS, TIME_SLOTS, POLICIES } from "@/lib/data";
 
 /* ─────────────────────────────────────────────────────────────
    Shared submit helper
@@ -319,13 +319,6 @@ export function BookModal() {
                           {svc.subtitle}
                         </p>
                       </div>
-                      {svc.priceTiers && (
-                        <span className={`text-[0.7rem] font-bold px-2.5 py-1 rounded-full ${
-                          active ? "bg-gold text-white" : "bg-gold-pale text-gold-dark"
-                        }`}>
-                          From {svc.priceTiers[0].price}
-                        </span>
-                      )}
                     </button>
                   );
                 })}
@@ -399,7 +392,7 @@ export function BookModal() {
                 <input className={inp} placeholder="e.g. Chanda Mwale" value={name} onChange={(e) => setName(e.target.value)} />
               </F>
               <F label="WhatsApp Number">
-                <input className={inp} type="tel" placeholder="+260 97X XXX XXX" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <input className={inp} type="tel" placeholder="+260 975 200 005" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </F>
               <F label="Property Address">
                 <input className={inp} placeholder="Plot / Street, Neighbourhood, Lusaka" value={address} onChange={(e) => setAddress(e.target.value)} />
@@ -535,7 +528,7 @@ export function QuoteModal() {
             </F>
           </div>
           <F label="Phone / WhatsApp">
-            <input className={inp} type="tel" placeholder="+260 97X XXX XXX" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
+            <input className={inp} type="tel" placeholder="+260 975 200 005" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
           </F>
           <F label="Service Type">
             <select className={sel} value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>
@@ -580,30 +573,30 @@ export function PolicyModal() {
   const { modal, close } = useModal();
   if (modal !== "policy") return null;
 
-  const items = [
-    { t: "Deposit required",           b: "A deposit is required to secure your cleaning slot." },
-    { t: "24-hour cancellation policy",b: "Cancellations must be made at least 24 hours prior to your appointment, or a fee may apply." },
-    { t: "Access to property",         b: "Please ensure access is available at the agreed time, or leave clear instructions." },
-  ];
-
+  // POLICIES is the single source of truth (lib/data.ts) — also used by
+  // PolicyBanner on the page itself, so the two never drift out of sync.
   return (
     <Overlay onClose={close}>
       <ModalBox>
-        <ModalHead title="Our Booking Policy" subtitle="Please read before your first booking." onClose={close} />
+        <ModalHead title="Booking & Cancellation Policy" subtitle="Please read before your first booking." onClose={close} />
         <ModalBody>
           <div className="space-y-3 mb-5">
-            {items.map((it) => (
-              <div key={it.t} className="flex gap-3 bg-gold-pale border border-gold/12 rounded-xl p-4">
+            {POLICIES.map((p) => (
+              <div key={p.title} className="flex gap-3 bg-gold-pale border border-gold/12 rounded-xl p-4">
                 <CheckCircle size={16} strokeWidth={2} className="text-gold mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-brand-dark text-sm">{it.t}</p>
-                  <p className="text-brand-mid text-sm mt-0.5 leading-relaxed">{it.b}</p>
+                  <p className="font-semibold text-brand-dark text-sm">{p.title}</p>
+                  <p className="text-brand-mid text-sm mt-0.5 leading-relaxed">{p.body}</p>
                 </div>
               </div>
             ))}
           </div>
           <p className="text-sm text-brand-soft text-center">
             We respect your time — thank you for respecting ours. 🙏
+          </p>
+          <p className="text-xs text-brand-soft/70 text-center mt-4 pt-4 border-t border-brand-border">
+            <span className="font-serif italic text-brand-dark">Radiant Rose Cleaning Company</span>
+            {" — Excellence in Every Clean. Radiant Results."}
           </p>
         </ModalBody>
         <ModalFoot>
@@ -795,7 +788,7 @@ export function RecurringModal() {
             <input className={inp} placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} required />
           </F>
           <F label="WhatsApp Number">
-            <input className={inp} type="tel" placeholder="+260 97X XXX XXX" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+            <input className={inp} type="tel" placeholder="+260 975 200 005" value={phone} onChange={(e) => setPhone(e.target.value)} required />
           </F>
           <F label="Property Address">
             <input className={inp} placeholder="Plot / Street, Neighbourhood, Lusaka" value={address} onChange={(e) => setAddress(e.target.value)} required />
@@ -805,7 +798,7 @@ export function RecurringModal() {
             <strong className="text-brand-dark">
               {RECURRING_PLANS.find((p) => p.id === plan)?.label} plan selected
             </strong>{" "}
-            — Your discount applies automatically. We&apos;ll confirm your preferred day via WhatsApp.
+            — Your discount applies automatically. We'll confirm your preferred day via WhatsApp.
           </div>
           {error && <ErrorBanner message={error} />}
         </ModalBody>

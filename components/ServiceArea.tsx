@@ -47,7 +47,7 @@ export default function ServiceArea() {
               <p className="text-gold font-semibold text-sm">Greater Lusaka Area</p>
               <p className="text-brand-soft text-xs mt-0.5">Zambia</p>
             </div>
-            <p className="font-semibold text-sm text-brand-dark mb-1">Lusaka &amp; Surrounds</p>
+            <p className="font-semibold text-sm text-brand-dark mb-1">Lusaka & Surrounds</p>
             <p className="text-brand-soft text-xs leading-relaxed">
               Kabulonga • Woodlands • Ibex Hill • Rhodespark • Chelstone • Avondale • Roma • + More
             </p>

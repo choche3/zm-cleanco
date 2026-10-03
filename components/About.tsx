@@ -1,20 +1,12 @@
 "use client";
-import { Users, Star, CalendarCheck, ThumbsUp } from "lucide-react";
 import { useModal } from "@/lib/modal-context";
-
-const STATS = [
-  { Icon: Users,         num: "200+", label: "Happy Clients",    sub: "across Lusaka"      },
-  { Icon: Star,          num: "5.0",  label: "Average Rating",   sub: "from our customers" },
-  { Icon: CalendarCheck, num: "3+",   label: "Years of Service", sub: "trusted in Zambia"  },
-  { Icon: ThumbsUp,      num: "100%", label: "Satisfaction",     sub: "Guaranteed"          },
-];
 
 export default function About() {
   const { open } = useModal();
   return (
     <section id="about" className="bg-white py-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
 
           {/* Text */}
           <div>
@@ -43,22 +35,6 @@ export default function About() {
             >
               Booking policy →
             </button>
-          </div>
-
-          {/* Stats grid */}
-          <div className="grid grid-cols-2 gap-px bg-brand-border rounded-2xl overflow-hidden">
-            {STATS.map(({ Icon, num, label, sub }) => (
-              <div key={label} className="bg-white p-7 flex flex-col gap-2">
-                <Icon size={20} strokeWidth={1.6} className="text-gold" />
-                <div className="font-serif font-bold text-[2.2rem] text-brand-dark leading-none">
-                  {num}
-                </div>
-                <div>
-                  <p className="font-semibold text-[0.88rem] text-brand-dark">{label}</p>
-                  <p className="text-brand-soft text-xs">{sub}</p>
-                </div>
-              </div>
-            ))}
           </div>
 
         </div>

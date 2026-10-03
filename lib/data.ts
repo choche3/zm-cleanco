@@ -35,19 +35,10 @@ export interface RecurringPlan {
 }
 
 // ── Reviews ───────────────────────────────────────────────────────
+// Client-approved testimonials only — add more here as they come in.
 export const REVIEWS: Review[] = [
   {
     id: "1",
-    name: "Thandiwe Mwamba",
-    initials: "TM",
-    neighbourhood: "Kabulonga",
-    date: "May 2026",
-    rating: 5,
-    body: "Absolutely brilliant service! They came on time, were thorough, and my house has never looked this clean. I've already booked a recurring plan. Highly recommend to anyone in Lusaka!",
-    color: "#2E7D4F",
-  },
-  {
-    id: "2",
     name: "Brian Kaluba",
     initials: "BK",
     neighbourhood: "Woodlands",
@@ -57,7 +48,7 @@ export const REVIEWS: Review[] = [
     color: "#C9A84C",
   },
   {
-    id: "3",
+    id: "2",
     name: "Precious Nkonde",
     initials: "PN",
     neighbourhood: "Ibex Hill",
@@ -65,36 +56,6 @@ export const REVIEWS: Review[] = [
     rating: 5,
     body: "I run an Airbnb and these guys are lifesavers. Quick turnarounds, excellent attention to detail. My guests always comment on how spotless the place is. 10/10.",
     color: "#7B5EA7",
-  },
-  {
-    id: "4",
-    name: "Charles Mutale",
-    initials: "CM",
-    neighbourhood: "Rhodespark",
-    date: "March 2026",
-    rating: 5,
-    body: "We hired them for our office and the results exceeded expectations. Very professional, discreet, and efficient. Will definitely continue using their services.",
-    color: "#2980B9",
-  },
-  {
-    id: "5",
-    name: "Grace Phiri",
-    initials: "GP",
-    neighbourhood: "Avondale",
-    date: "March 2026",
-    rating: 5,
-    body: "The deep cleaning was so thorough — they cleaned places I didn't even think to ask for. My home smelled fresh for days. Will be booking monthly going forward.",
-    color: "#C0392B",
-  },
-  {
-    id: "6",
-    name: "Moses Banda",
-    initials: "MB",
-    neighbourhood: "Roma",
-    date: "February 2026",
-    rating: 5,
-    body: "Post-construction clean after our renovation was flawless. Every surface was spotless. Reasonable pricing and the team was very respectful of our property.",
-    color: "#16A085",
   },
 ];
 
@@ -201,13 +162,28 @@ export const TIME_SLOTS = [
 ];
 
 // ── Policies ──────────────────────────────────────────────────────
+// Single source of truth for the booking & cancellation policy — rendered
+// by both PolicyBanner (on-page) and PolicyModal (the "Booking policy →"
+// popup). Edit it once here and both stay in sync.
 export const POLICIES = [
   {
-    title: "Deposit required",
-    body: "to secure your cleaning slot.",
+    title: "Advance booking",
+    body: "— cleaning services should be booked at least 7 days before your preferred cleaning date.",
   },
   {
-    title: "24-hour cancellation policy",
-    body: "— cancellations must be done 24hrs prior to appointment or this might attract a fee.",
+    title: "Booking deposit",
+    body: "— a 50% deposit is required to secure and confirm your booking.",
+  },
+  {
+    title: "Cancellations & refunds",
+    body: "— your deposit is refundable if you cancel at least 24 hours before your scheduled cleaning time.",
+  },
+  {
+    title: "Late cancellations",
+    body: "— cancellations made less than 24 hours before the scheduled cleaning time will result in the booking deposit being non-refundable.",
+  },
+  {
+    title: "Balance payment",
+    body: "— the remaining 50% balance is payable on the day of the cleaning service.",
   },
 ];

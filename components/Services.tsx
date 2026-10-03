@@ -20,14 +20,15 @@ export default function Services() {
           What We Offer
         </p>
         <h2 className="font-serif font-bold text-3xl md:text-4xl text-brand-dark mb-2">
-          Our Services &amp; Pricing
+          Our Services
         </h2>
         <p className="text-brand-soft text-[0.95rem] max-w-lg">
-          Tailored cleaning for every space across Lusaka and Zambia.
+          Tailored cleaning for every space across Lusaka and Zambia. Request a quote for pricing.
         </p>
       </div>
 
-      {/* 3-column grid */}
+      {/* 3-column grid — one card template for every service.
+          Pricing is never shown here; it's shared once a quote is requested. */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {SERVICES.map((svc) => {
           const Icon = ICON_MAP[svc.icon] ?? Home;
@@ -55,38 +56,22 @@ export default function Services() {
                 {svc.subtitle}
               </p>
 
-              {/* Fixed pricing — shown directly on the card */}
-              {svc.priceTiers ? (
-                <div className="mt-auto pt-3 border-t border-brand-border/60 space-y-1.5">
-                  {svc.priceTiers.map((t) => (
-                    <div key={t.label} className="flex items-center justify-between gap-3 text-[0.8rem]">
-                      <span className="text-brand-soft">{t.label}</span>
-                      <span className="font-bold text-brand-dark whitespace-nowrap">{t.price}</span>
-                    </div>
-                  ))}
-                  {svc.priceNote && (
-                    <p className="text-[0.72rem] text-gold-dark font-semibold pt-1">{svc.priceNote}</p>
-                  )}
-                </div>
-              ) : (
-                /* Custom-quote services — no per-card quote trigger.
-                   Points down to the single quote request at the bottom of the page. */
-                <div className="mt-auto pt-3 border-t border-brand-border/60">
-                  <button
-                    onClick={scrollToQuote}
-                    className="w-full flex items-center justify-between text-left"
-                  >
-                    <span className="inline-flex items-center gap-1 bg-gold-pale text-gold-dark text-[0.72rem] font-bold px-3 py-1.5 rounded-full tracking-wide">
-                      {svc.priceNote ?? "CUSTOM QUOTE"}
-                    </span>
-                    <ArrowRight
-                      size={16}
-                      strokeWidth={2}
-                      className="text-brand-soft group-hover:text-gold group-hover:translate-x-0.5 transition-all flex-shrink-0 ml-2"
-                    />
-                  </button>
-                </div>
-              )}
+              {/* Request a quote — the only place pricing is shared */}
+              <div className="mt-auto pt-3 border-t border-brand-border/60">
+                <button
+                  onClick={scrollToQuote}
+                  className="w-full flex items-center justify-between text-left"
+                >
+                  <span className="inline-flex items-center gap-1 bg-gold-pale text-gold-dark text-[0.72rem] font-bold px-3 py-1.5 rounded-full tracking-wide">
+                    GET A QUOTE
+                  </span>
+                  <ArrowRight
+                    size={16}
+                    strokeWidth={2}
+                    className="text-brand-soft group-hover:text-gold group-hover:translate-x-0.5 transition-all flex-shrink-0 ml-2"
+                  />
+                </button>
+              </div>
             </div>
           );
         })}
