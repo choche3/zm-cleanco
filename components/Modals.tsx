@@ -798,7 +798,7 @@ export function RecurringModal() {
             <strong className="text-brand-dark">
               {RECURRING_PLANS.find((p) => p.id === plan)?.label} plan selected
             </strong>{" "}
-            — Your discount applies automatically. We'll confirm your preferred day via WhatsApp.
+            — Your discount applies automatically. We&apos;ll confirm your preferred day via WhatsApp.
           </div>
           {error && <ErrorBanner message={error} />}
         </ModalBody>

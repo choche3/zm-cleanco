@@ -20,7 +20,7 @@ export default function Footer() {
               Partner With Us
             </p>
             <h3 className="font-serif font-bold text-2xl md:text-3xl text-white">
-              Let's grow together
+              Let&apos;s grow together
             </h3>
             <p className="text-white/50 text-sm mt-1 max-w-sm">
               Get more customers 24/7 with professional cleaning services across Lusaka.
