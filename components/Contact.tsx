@@ -42,7 +42,7 @@ export default function Contact() {
               {[
                 { Icon: MapPin,  label: "Serving Lusaka & Surrounding Areas",  href: null },
                 { Icon: Mail,    label: "info@radiantrosecleaning.co.zm",      href: "mailto:info@radiantrosecleaning.co.zm" },
-                { Icon: Phone,   label: "+260 975 200 005",                    href: "tel:+260970000000" },
+                { Icon: Phone,   label: "+260 975 200 005",                    href: "tel:+260975200005" },
                 { Icon: Clock,   label: "Monday–Saturday, 7am–6pm",            href: null },
               ].map(({ Icon, label, href }) => (
                 <li key={label} className="flex items-start gap-2.5">

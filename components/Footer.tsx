@@ -90,7 +90,7 @@ export default function Footer() {
           <ul className="space-y-3 mb-6">
             {[
               { Icon: Mail,   text: "info@radiantrosecleaning.co.zm", href: "mailto:info@radiantrosecleaning.co.zm" },
-              { Icon: Phone,  text: "+260 975 200 005",     href: "tel:+260970000000" },
+              { Icon: Phone,  text: "+260 975 200 005",     href: "tel:+260975200005" },
               { Icon: Clock,  text: "Mon–Sat, 7am–6pm",     href: null },
               { Icon: MapPin, text: "Lusaka, Zambia",        href: null },
             ].map(({ Icon, text, href }) => (
