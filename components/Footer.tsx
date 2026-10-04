@@ -89,7 +89,7 @@ export default function Footer() {
           <h4 className="text-white font-semibold text-sm tracking-wide mb-4">Contact Info</h4>
           <ul className="space-y-3 mb-6">
             {[
-              { Icon: Mail,   text: "info@radiantrosecleaning.co.zm", href: "mailto:info@radiantrosecleaning.co.zm" },
+              { Icon: Mail,   text: "mubangateresa@gmail.com", href: "mailto:mubangateresa@gmail.com" },
               { Icon: Phone,  text: "+260 975 200 005",     href: "tel:+260975200005" },
               { Icon: Clock,  text: "Mon–Sat, 7am–6pm",     href: null },
               { Icon: MapPin, text: "Lusaka, Zambia",        href: null },

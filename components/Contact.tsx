@@ -41,7 +41,7 @@ export default function Contact() {
             <ul className="space-y-2.5 text-sm text-brand-mid mb-6">
               {[
                 { Icon: MapPin,  label: "Serving Lusaka & Surrounding Areas",  href: null },
-                { Icon: Mail,    label: "info@radiantrosecleaning.co.zm",      href: "mailto:info@radiantrosecleaning.co.zm" },
+                { Icon: Mail,    label: "mubangateresa@gmail.com",      href: "mailto:mubangateresa@gmail.com" },
                 { Icon: Phone,   label: "+260 975 200 005",                    href: "tel:+260975200005" },
                 { Icon: Clock,   label: "Monday–Saturday, 7am–6pm",            href: null },
               ].map(({ Icon, label, href }) => (
@@ -80,7 +80,7 @@ export default function Contact() {
             </h3>
             <div className="flex flex-col gap-3 mb-5">
               <a
-                href="mailto:info@radiantrosecleaning.co.zm"
+                href="mailto:mubangateresa@gmail.com"
                 className="flex items-center gap-3 bg-white border border-brand-border rounded-xl px-4 py-3.5 hover:border-gold transition-colors group"
               >
                 <div className="w-9 h-9 rounded-lg bg-gold-pale flex items-center justify-center flex-shrink-0">
@@ -90,7 +90,7 @@ export default function Contact() {
                   <p className="text-sm font-semibold text-brand-dark group-hover:text-gold transition-colors">
                     Email us
                   </p>
-                  <p className="text-xs text-brand-soft">info@radiantrosecleaning.co.zm</p>
+                  <p className="text-xs text-brand-soft">mubangateresa@gmail.com</p>
                 </div>
               </a>
               <a

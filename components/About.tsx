@@ -24,10 +24,10 @@ export default function About() {
               products. We treat your home and business with the same care we would give our own.
             </p>
             <a
-              href="mailto:info@radiantrosecleaning.co.zm"
+              href="mailto:mubangateresa@gmail.com"
               className="block text-gold font-medium text-sm mb-4 hover:underline"
             >
-              info@radiantrosecleaning.co.zm
+              mubangateresa@gmail.com
             </a>
             <button
               onClick={() => open("policy")}
